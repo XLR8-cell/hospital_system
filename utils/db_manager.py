@@ -5,7 +5,6 @@ Handles SQLite connection, initialization, and core CRUD operations.
 
 import os
 import sqlite3
-from datetime import datetime
 
 
 class HospitalDB:

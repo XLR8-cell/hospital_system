@@ -30,7 +30,7 @@ class BillingManager(HospitalDB):
                     'status, created_at) VALUES (?, ?, ?, ?, ?)',
                     (patient_id, amount, description, 'Unpaid', created_at)
                 )
-            print(f"  ✓ Bill of ${amount:.2f} generated for patient {patient_id}.")
+            print(f"  ✓ Bill of KSh {amount:.2f} generated for patient {patient_id}.")
         except Exception as e:
             print(f"  ✗ Error generating bill: {e}")
 
@@ -44,7 +44,9 @@ class BillingManager(HospitalDB):
         try:
             if patient_id:
                 rows = self.fetch_all(
-                    'SELECT * FROM bills WHERE patient_id = ? ORDER BY created_at',
+                    'SELECT b.*, p.name as patient_name FROM bills b '
+                    'JOIN patients p ON b.patient_id = p.id '
+                    'WHERE b.patient_id = ? ORDER BY b.created_at',
                     (patient_id,)
                 )
             else:
@@ -58,17 +60,17 @@ class BillingManager(HospitalDB):
                 print("  No bills found.")
                 return
 
-            print(f'\n  {"ID":>4}  {"Patient":<18} {"Amount":>10} '
+            print(f'\n  {"ID":>4}  {"Patient":<18} {"Amount":>12} '
                   f'{"Status":<10} {"Date"}')
-            print('  ' + '-' * 60)
+            print('  ' + '-' * 65)
             total = 0
             for row in rows:
-                print(f'  {row["id"]:>4}  {row.get("patient_name", "N/A"):<18} '
-                      f'${row["amount"]:>8.2f} {row["status"]:<10} '
+                print(f'  {row["id"]:>4}  {row["patient_name"]:<18} '
+                      f'KSh {row["amount"]:>10.2f} {row["status"]:<10} '
                       f'{row["created_at"]}')
                 if row['status'] == 'Unpaid':
                     total += row['amount']
-            print(f'\n  Total Unpaid: ${total:.2f}')
+            print(f'\n  Total Unpaid: KSh {total:.2f}')
         except Exception as e:
             print(f"  ✗ Error viewing bills: {e}")
 
@@ -114,7 +116,7 @@ class BillingManager(HospitalDB):
             print(f"  Phone:       {row['phone']}")
             print(f"  Date:        {row['created_at']}")
             print(f"  Description: {row['description']}")
-            print(f"  Amount:      ${row['amount']:.2f}")
+            print(f"  Amount:      KSh {row['amount']:.2f}")
             print(f"  Status:      {row['status']}")
             print("=" * 50)
         except Exception as e:

@@ -9,6 +9,7 @@ from utils.patient_ops import PatientManager
 from utils.doctor_ops import DoctorManager
 from utils.appointment_ops import AppointmentManager
 from utils.billing import BillingManager
+from utils.ward_ops import WardManager
 
 
 def get_input(prompt, required=True):
@@ -149,16 +150,45 @@ def billing_menu(bm):
             break
 
 
+def ward_menu(wm):
+    """Ward management submenu."""
+    while True:
+        print("\n  --- WARD MANAGEMENT ---")
+        print("  1. Add Ward")
+        print("  2. View All Wards")
+        print("  3. Admit Patient")
+        print("  4. Discharge Patient")
+        print("  5. View Available Beds")
+        print("  6. Back to Main Menu")
+        choice = input("  Select: ").strip()
+
+        if choice == '1':
+            wm.add_ward(
+                get_input("  Ward name: "),
+                int(get_input("  Capacity: "))
+            )
+        elif choice == '2':
+            wm.view_wards()
+        elif choice == '3':
+            wm.admit_patient(get_input("  Ward name: "))
+        elif choice == '4':
+            wm.discharge_patient(get_input("  Ward name: "))
+        elif choice == '5':
+            wm.view_available_beds()
+        elif choice == '6':
+            break
+
+
 def main():
     """
     Main application entry point.
     Initializes managers and runs the main menu loop.
     """
-    # Initialize managers (inherits HospitalDB, so db is initialized once)
     pm = PatientManager()
     dm = DoctorManager()
     am = AppointmentManager()
     bm = BillingManager()
+    wm = WardManager()
 
     print("\n" + "=" * 50)
     print("   HOSPITAL MANAGEMENT SYSTEM")
@@ -171,7 +201,8 @@ def main():
             print("2. Doctor Management")
             print("3. Appointment System")
             print("4. Billing System")
-            print("5. Exit")
+            print("5. Ward Management")
+            print("6. Exit")
             choice = input("Select: ").strip()
 
             if choice == '1':
@@ -183,6 +214,8 @@ def main():
             elif choice == '4':
                 billing_menu(bm)
             elif choice == '5':
+                ward_menu(wm)
+            elif choice == '6':
                 print("\nThank you for using HMS. Goodbye!")
                 sys.exit(0)
             else:
