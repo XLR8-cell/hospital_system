@@ -10,6 +10,7 @@ appointment booking, billing, and ward tracking.
 - **Doctor Management**: Add doctors with specializations and departments
 - **Appointment System**: Book appointments with conflict detection, view by date or patient
 - **Billing System**: Generate bills, track payments, print invoices
+- **Ward Management**: Track ward occupancy, admit/discharge patients, view available beds per ward
 - **Data Persistence**: All data stored in SQLite database
 
 ## Setup
